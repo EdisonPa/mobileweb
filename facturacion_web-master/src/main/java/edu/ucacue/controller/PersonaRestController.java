@@ -16,6 +16,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -46,6 +48,14 @@ public class PersonaRestController {
 		return personaRepositorio.findAll();
 	}
 
+	@GetMapping("/cliente/page/{page}")
+	@ResponseStatus(HttpStatus.OK)
+	public Page<Persona> filtrarProductos(@PathVariable Integer page) {
+		Pageable pageable=PageRequest.of(page, 8,Sort.by("nombre"));
+		Page<Persona> personas= personaRepositorio.findAll(pageable);
+		return personas;
+	}
+	
 	@GetMapping("/clientes/{id}")
 	public Persona getById(@PathVariable int id) {
 
