@@ -3,20 +3,14 @@ package edu.ucacue.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
-
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -30,8 +24,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
-
 import edu.ucacue.infraestructura.repository.PersonaRepositorio;
 import edu.ucacue.modelo.Persona;
 
@@ -43,7 +35,7 @@ public class PersonaRestController {
 	@Autowired
 	private PersonaRepositorio personaRepositorio;
 
-	@GetMapping("/clientes") // obtner datos
+	@GetMapping("/clientes")
 	public List<Persona> index() {
 		return personaRepositorio.findAll();
 	}
@@ -63,14 +55,13 @@ public class PersonaRestController {
 		return persona;
 	}
 
-	@GetMapping("/clientes/nombre")
-	public List<Persona> getByNombre(@RequestParam(name = "nombre") String nombre) {
-
+	@GetMapping("/clientes/nombre/{nombre}")
+	public List<Persona> getByNombre(@PathVariable(name = "nombre") String nombre) {
 		List<Persona> personas = personaRepositorio.findAllByNombre(nombre);
 		return personas;
 	}
 
-	@PostMapping("/cliente") // grabar/subir datos
+	@PostMapping("/cliente")
 	public ResponseEntity<?> saveCliente(@RequestBody Persona persona, BindingResult result) {
 		Persona personaGrabar;
 		Map<String, Object> response = new HashMap<>();
@@ -151,8 +142,9 @@ public class PersonaRestController {
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
 	
-	@DeleteMapping("/cliente/{id}") //borrar datos
-	public ResponseEntity<?> eliminarCliente(@PathVariable int id) {
+	@DeleteMapping("/cliente/{id}")
+	public ResponseEntity<?> eliminarCliente(
+			@PathVariable int id) {
 		
 		
 		Map<String, Object> response = new HashMap<>();
