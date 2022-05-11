@@ -4,9 +4,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -19,12 +22,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
 import edu.ucacue.infraestructura.repository.ProductoRepositorio;
 import edu.ucacue.modelo.Producto;
 
-//@CrossOrigin(origins = { "http:localhost:4200"})
+@CrossOrigin(origins = { "http://localhost:4200"})
 @RestController
 @RequestMapping("/api")
 public class ProductoRestController {
@@ -37,6 +40,14 @@ public class ProductoRestController {
 		return productoRepositorio.findAll();
 	}
 	
+	@GetMapping("/productos/page/{page}")
+	@ResponseStatus(HttpStatus.OK)
+	public Page<Producto> filtrarProductos(@PathVariable Integer page) {
+		Pageable pageable=PageRequest.of(page, 8,Sort.by("nombre"));
+		Page<Producto> productos= productoRepositorio.findAll(pageable);
+		return productos;
+	}
+	
 	@GetMapping("/productos/{id}")
 	public Producto getById(@PathVariable int id) {
 
@@ -44,9 +55,8 @@ public class ProductoRestController {
 		return producto;
 	}
 
-	@GetMapping("/productos/nombre")
-	public List<Producto> getByNombre(@RequestParam(name = "nombre") String nombre) {
-
+	@GetMapping("/productos/nombre/{nombre}")
+	public List<Producto> getByNombre(@PathVariable(name = "nombre") String nombre) {
 		List<Producto> productos = productoRepositorio.findAllByNombre(nombre);
 		return productos;
 	}
