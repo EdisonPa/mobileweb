@@ -25,6 +25,7 @@ public class Persona implements Serializable {
 	private String apellido;
 	private String telefono;
 	private Integer numeroHijos;
+	private String foto;
 	
 	@Column(unique = true)
 	private String cedula;
@@ -32,12 +33,13 @@ public class Persona implements Serializable {
 	public Persona()
 	{}
 	
-	public Persona(int id, String nombre, String apellido, String telefono) {
+	public Persona(int id, String nombre, String apellido, String telefono, String foto) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
 		this.apellido = apellido;
 		this.telefono = telefono;
+		this.foto= foto;
 	}
 
 	public int getId() {
@@ -78,13 +80,26 @@ public class Persona implements Serializable {
 
 	public void setNumeroHijos(Integer numeroHijos) {
 		this.numeroHijos = numeroHijos;
+		
 	}
-
+	
 	public String getCedula() {
 		return cedula;
 	}
 
 	public void setCedula(String cedula) {
 		this.cedula = cedula;
+	}
+
+	public String getFoto() {
+		return foto;
+	}
+
+	public void setFoto(String foto) {
+		this.foto = foto;
 	}	
+	
+	
+	
+	
 }
